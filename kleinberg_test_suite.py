@@ -1,12 +1,15 @@
 from kleinberg import kleinberg
 import numpy.random
 
-def random_kleinberg_test():
+def random_kleinberg_test(distributionFunct, length, k, numTests, timesPerTest):
     print 'Beginning Test....'
-    print ''
-
-
-
+    print 'Generating ' + numTests + ' random ' + length + ' length sequences...'
+    testSeqs = [distributionRandom(length, distributionFunct) for i in range(length)]
+    print 'Running Kleinberg algorithm...'
+    testSolutions = [testSeq(seq, k, timesPerTest) for seq in testSeqs]
+    return testSolutions
+    
+    
 
 # Returns the best possible result of the kleinberg algorithm 
 def bestPossible(seq,k):
@@ -14,21 +17,32 @@ def bestPossible(seq,k):
     sSeq.sort()
     return sSeq[len(sSeq)-k:]
 
-# Generates length-arrays of numbers drawn from distribution 
-def distributionList(distribution, length):
-    out = []
-    for i in range(length):
-        out.append(distribution())
-    return out
+
+# Returns randomly permuted length-length array of function
+# called on all ints between 0 and length 
+def distributionRandom(length, function):
+    a = [function(i) for i in range(length)]
+    return numpy.random.permutation(a)
+
+# Calls function on each value in values
+def distributionFixed(values, function):
+    a = [function(i) for i in values]
+    return a
+
 
 # Returns an array of tuples containing the selected
-# elements and the competitive ratio
+# elements and the competitive ratio and the average
+# competitive ratio
 def testSeq(seq,k,times):
-    opt = bestPOssible(seq,k)
+    opt = bestPossible(seq,k)
     out = []
+    totComp
     for i in range(times):
         cur = kleinberg(seq, len(seq), k)
-        outTup = (cur, float(sum(cur))/sum(opt)) # (K selected elements, comp-ratio)
+        comp = float(sum(cur))/sum(opt)
+        totComp += comp
+        outTup = (cur, comp) # (K selected elements, comp-ratio)
         out.append(outTup)
-    return out
+    totComp /= times
+    return out,totComp
         
