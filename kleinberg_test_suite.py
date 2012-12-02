@@ -3,12 +3,11 @@ import numpy.random
 
 def random_kleinberg_test(distributionFunct, length, k, numTests, timesPerTest):
     print 'Beginning Test....'
-    print 'Generating ' + numTests + ' random ' + length + ' length sequences...'
+    print 'Generating ' + str(numTests) + ' random ' + str(length) + ' length sequences...'
     testSeqs = [distributionRandom(length, distributionFunct) for i in range(length)]
     print 'Running Kleinberg algorithm...'
     testSolutions = [testSeq(seq, k, timesPerTest) for seq in testSeqs]
     return testSolutions
-    
     
 
 # Returns the best possible result of the kleinberg algorithm 
@@ -22,7 +21,7 @@ def bestPossible(seq,k):
 # called on all ints between 0 and length 
 def distributionRandom(length, function):
     a = [function(i) for i in range(length)]
-    return numpy.random.permutation(a)
+    return numpy.random.permutation(a).tolist()
 
 # Calls function on each value in values
 def distributionFixed(values, function):
@@ -36,9 +35,9 @@ def distributionFixed(values, function):
 def testSeq(seq,k,times):
     opt = bestPossible(seq,k)
     out = []
-    totComp
+    totComp = 0
     for i in range(times):
-        cur = kleinberg(seq, len(seq), k)
+        cur = kleinberg(len(seq), k, seq)
         comp = float(sum(cur))/sum(opt)
         totComp += comp
         outTup = (cur, comp) # (K selected elements, comp-ratio)
