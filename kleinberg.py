@@ -66,7 +66,7 @@ def kleinberg(N, k, W):
                         candidates.append(u)
 
             return (candidates, temp[:N])
-    candidates = kleinberg_helper(N, k, W)[0]
+    candidates = kleinberg_helper(N, k, W[:])[0]
     return candidates
 
     
