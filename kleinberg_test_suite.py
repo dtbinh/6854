@@ -4,14 +4,15 @@ import numpy.random
 def random_kleinberg_test(distributionFunct, length, k, numTests, timesPerTest):
     print 'Beginning Test....'
     print 'Generating ' + str(numTests) + ' random ' + str(length) + ' length sequences...'
-    testSeqs = [distributionRandom(length, distributionFunct) for i in range(length)]
+    testSeqs = [distributionRandom(length, distributionFunct) for i in range(numTests)]
     print 'Running Kleinberg algorithm...'
     testSolutions = [testSeq(seq, k, timesPerTest) for seq in testSeqs]
     return testSolutions
 
 def aveCompRatioOfTest(testSolutions):
     ratios = [sol[1] for sol in testSolutions]
-    aveRatio = ratios/len(lestSolutions)
+    aveRatio = sum(ratios)/len(ratios)
+    return aveRatio
 
 # Returns the best possible result of the kleinberg algorithm 
 def bestPossible(seq,k):
@@ -48,5 +49,5 @@ def testSeq(seq,k,times):
     totComp /= times
     return out,totComp
         
-f = lambda x:x**2
-a = random_kleinberg_test(f, 100, 10, 10, 10)
+f = lambda x:x**3
+a = random_kleinberg_test(f, 1000, 100, 10, 10)
