@@ -11,15 +11,27 @@ def select_simple(N, W):
     l = max(int(N/math.e),1)
     best_sample = W.pop(0)
     # sampling the L number of candidate
+    # list of items
+    items = [best_sample]
     for i in range(0,l-1):
-        best_sample = max(best_sample, W.pop(0))
+        sample = W.pop(0)
+        items.append(sample)
+        best_sample = max(best_sample, sample)
     # choosing the one that exceeds the best of the sample
     # from the remaining candidates
+    best_candidate = None
     for i in range(0, N-l-1):
         candidate = W.pop(0)
+        items.append(candidate)
         if candidate > best_sample:
-            return candidate
-    return W.pop(0)
+            if best_candidate == None or candidate > best_candidate: 
+                best_candidate = candidate
+    # if there is no better candidate, use the last one.
+    candidate = W.pop(0)
+    items.append(candidate)
+    if best_candidate == None:
+        best_candidate = candidate
+    return ([best_candidate], items)
 
 def binomial_sample(N, r, count = 0):
     debug = False
@@ -34,16 +46,12 @@ def binomial_sample(N, r, count = 0):
 # output: (k-size list of candidates, sample population)
 def kleinberg(N, k, W):
     def kleinberg_helper(N,k,W):
-        if k == 1:
-            # temporary array for the data
+        if N < k:
             temp = W[:]
-            # sampling population
-            samples = W[:N]
-            # removing the sample from the queue
-            for i in range(N):
-                W.pop(0)
-            # return chosen value + sample population
-            return ([select_simple(N, temp)], samples)
+            W = []
+            return (temp[:], temp[:])
+        elif k == 1:
+            return select_simple(N, W)
         else:
             temp = W[:]
             # getting the sample size from binomial distribution
