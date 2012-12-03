@@ -8,7 +8,10 @@ def random_kleinberg_test(distributionFunct, length, k, numTests, timesPerTest):
     print 'Running Kleinberg algorithm...'
     testSolutions = [testSeq(seq, k, timesPerTest) for seq in testSeqs]
     return testSolutions
-    
+
+def aveCompRatioOfTest(testSolutions):
+    ratios = [sol[1] for sol in testSolutions]
+    aveRatio = ratios/len(lestSolutions)
 
 # Returns the best possible result of the kleinberg algorithm 
 def bestPossible(seq,k):
