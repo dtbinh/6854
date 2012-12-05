@@ -8,6 +8,8 @@
 import math
 import numpy
 def select_simple(N, W):
+    if len(W) == 1:
+        return (W,W)
     l = max(int(N/math.e),1)
     best_sample = W.pop(0)
     # sampling the L number of candidate
@@ -77,6 +79,48 @@ def kleinberg(N, k, W):
     candidates = kleinberg_helper(N, k, W[:])[0]
     return candidates
 
+
+
+def kleinberg_will(N,K,W):
+    if K == 1:
+        return select_simple(N,W)[0]
     
-print select_simple(10, [4,1,3,5,9,0,2,8,6,7])
-print kleinberg(10, 3, [4,1,3,5,9,0,2,8,6,7])
+    L = int(math.floor(K/2))
+    
+    split = binomial_sample(N, .5)
+    split = min(split, N - L)
+    split = max(split, L)
+
+
+
+    rightHalf = W[split:]
+    leftHalf = W[:split]
+    print '...'
+    print split,L,W[:split]
+    print '...'
+    
+
+    prevAnswers = kleinberg_will(split, L, W[:split])
+    
+    
+    cand = leftHalf
+    cand.sort()
+    y_L = cand[-L]
+    if len(rightHalf) == K-L:
+        return prevAnswers + rightHalf
+    else:
+        chosen = []
+        for n in rightHalf:
+            if n >= y_L and len(chosen) < K-L:
+                chosen.append(n)
+        return prevAnswers + chosen
+    
+        
+
+
+
+    
+#print select_simple(10, [4,1,3,5,9,0,2,8,6,7])
+for x in range(30):
+    output = kleinberg_will(10, 5, [4,1,3,5,9,0,2,8,6,7])
+    print output

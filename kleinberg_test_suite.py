@@ -49,5 +49,5 @@ def testSeq(seq,k,times):
     totComp /= times
     return out,totComp
         
-f = lambda x:x**3
+f = lambda x:x**.5
 a = random_kleinberg_test(f, 1000, 100, 10, 10)
